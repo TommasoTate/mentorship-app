@@ -1,15 +1,15 @@
-import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import { Navbar } from "@/components/layout/navbar";
+import { currentUser } from "@clerk/nextjs/server";
 
-export default function AuthenticatedLayout({
+export default async function AuthenticatedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = auth();
+  const user = await currentUser();
 
-  if (!userId) {
+  if (!user) {
     redirect("/sign-in");
   }
 

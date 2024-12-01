@@ -1,12 +1,11 @@
-import type { Config } from "drizzle-kit";
+import 'dotenv/config';
+import { defineConfig } from 'drizzle-kit';
 
-export default {
-  schema: "./src/lib/db/schema.ts",
-  out: "./drizzle",
-  driver: "pg",
+export default defineConfig({
+  out: './drizzle',
+  schema: './src/lib/db/schema.ts',
+  dialect: 'postgresql',
   dbCredentials: {
-    connectionString: process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL!,
   },
-  verbose: true,
-  strict: true,
-} satisfies Config; 
+});

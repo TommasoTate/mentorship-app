@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { eq, or } from "drizzle-orm";
@@ -8,21 +8,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 export default async function SessionsPage() {
-  const { userId } = auth();
-  if (!userId) redirect("/sign-in");
+  const user = await currentUser();
+  if (!user) redirect("/sign-in");
 
-  const user = await db.query.users.findFirst({
-    where: eq(users.clerkId, userId),
+  const userData = await db.query.users.findFirst({
+    where: eq(users.clerkId, user.id),
   });
 
-  if (!user) {
+  if (!userData) {
     redirect("/");
   }
 
   const userSessions = await db.query.sessions.findMany({
     where: or(
-      eq(sessions.mentorId, user.id),
-      eq(sessions.requesterId, user.id)
+      eq(sessions.mentorId, userData.id),
+      eq(sessions.requesterId, userData.id)
     ),
     with: {
       mentor: true,
@@ -35,7 +35,7 @@ export default async function SessionsPage() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Sessions</h1>
-        {user.role !== "mentor" && (
+        {userData.role !== "mentor" && (
           <Button>Book New Session</Button>
         )}
       </div>
@@ -49,7 +49,7 @@ export default async function SessionsPage() {
                   Session with{" "}
                   {user.id === session.mentorId
                     ? session.requester.name
-                    : session.mentor.name}
+                      : session.mentor.name}
                 </CardTitle>
                 <Badge
                   variant={

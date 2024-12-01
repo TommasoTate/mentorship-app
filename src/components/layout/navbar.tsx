@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { currentUser } from "@clerk/nextjs/server";
 
-export function Navbar() {
-  const { user } = useUser();
+export async function Navbar() {
+  const user = await currentUser();
   const userRole = user?.publicMetadata?.role as string | undefined;
 
   return (
@@ -29,7 +30,7 @@ export function Navbar() {
               <Button variant="ghost" asChild>
                 <Link href="/sessions">Sessions</Link>
               </Button>
-              <UserButton afterSignOutUrl="/" />
+              <UserButton  />
             </>
           ) : (
             <Button asChild>
