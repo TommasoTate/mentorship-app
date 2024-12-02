@@ -74,7 +74,7 @@ export default async function SessionsPage() {
                 {session.notes && (
                   <p className="text-sm">Notes: {session.notes}</p>
                 )}
-                {session.status === "pending" && user.role === "mentor" && (
+                {session.status === "pending" && userData.role === "mentor" && (
                   <div className="flex gap-2 mt-4">
                     <Button size="sm" variant="outline">
                       Decline
