@@ -156,6 +156,10 @@ Additional features on top of employee role:
  - Use Clerk for authentication and authorization
  - Implement role-based access control (RBAC):
 
+# Database integration
+ - Use Drizzle as the ORM
+ - Use Neon Postgres as the database
+
 # Error Handling
 
 Implement comprehensive error handling:
